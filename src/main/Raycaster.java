@@ -3,6 +3,8 @@ package main;
 import utils.UtilFunctions;
 import java.lang.Math;
 
+import com.sun.javafx.scene.control.skin.Utils;
+
 /**
  * Raycaster module for the player that handles the raycasting information.
  * 
@@ -21,11 +23,10 @@ public class Raycaster {
 		
 		int startAngle = this.player.getLookAngle() - (Settings.fov / 2);
 		int angleDelta = Settings.fov / Settings.numRays;
-		System.out.println(angleDelta);
 		
-		for (int ray = 1; ray < Settings.numRays; ray++) {
+		for (int ray = 1; ray <= Settings.numRays; ray++) {
 			int angle = startAngle + (angleDelta * ray);
-			hits[ray] = this.castRay(UtilFunctions.clampAngle(angle));
+			hits[ray-1] = this.castRay(UtilFunctions.clampAngle(angle));
 		}
 		
 		return hits;
@@ -68,15 +69,25 @@ public class Raycaster {
 	    for (int x = x0; x <= x1; x++) {
 	       
 	    	if (steep) {
+	    		if (!Map.checkInBound(y, x))
+	    			break;
+	    		
 	        	if (Map.getValue(y, x) == 1) {
 	        		// hit wall
-	        		return new RaycastHit(UtilFunctions.distance(x0, y0, y, x), Map.getValue(y, x));
+	        		double p = Math.cos(UtilFunctions.clampAngle(angle - this.player.getLookAngle()));
+	        		double planarDistance = UtilFunctions.distance(x0, y0, y, x) * p;
+	        		return new RaycastHit(planarDistance, UtilFunctions.distance(x0, y0, y, x), Map.getValue(y, x));
 	        	}
 	        }
 	        else {
+	        	if (!Map.checkInBound(x, y))
+	    			break;
+	        	
 	        	if (Map.getValue(x, y) == 1) {
 	        		// hit wall
-	        		return new RaycastHit(UtilFunctions.distance(x0, y0, x, y), Map.getValue(x, y));
+	        		double p = Math.cos(UtilFunctions.clampAngle(angle - this.player.getLookAngle()));
+	        		double planarDistance = UtilFunctions.distance(x0, y0, x, y) * p;
+	        		return new RaycastHit(planarDistance, UtilFunctions.distance(x0, y0, x, y), Map.getValue(x, y));
 	        	}
 	        }
 

@@ -7,16 +7,22 @@ package main;
  */
 public class RaycastHit {
 
-	private double distance;
+	private double planarDistance;
+	private double trueDistance;
 	private int obstacleType;
 	
-	public RaycastHit(double distance, int obstacleType) {
-		this.distance = distance;
+	public RaycastHit(double planarDistance, double trueDistance, int obstacleType) {
+		this.planarDistance = planarDistance;
+		this.trueDistance = trueDistance;
 		this.obstacleType = obstacleType;
 	}
 
-	public double getDistance() {
-		return distance;
+	public double getPlanarDistance() {
+		return planarDistance;
+	}
+	
+	public double getTrueDistance() {
+		return this.trueDistance;
 	}
 
 	public int getObstacleType() {
