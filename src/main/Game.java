@@ -3,7 +3,7 @@ package main;
 import utils.Observable;
 import utils.Observer;
 
-/*
+/**
  * The backend game class. Maintains the map data, player position,
  * and ray-cast calculations.
  * 

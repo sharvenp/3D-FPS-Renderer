@@ -3,6 +3,13 @@ package main;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
+/**
+ * Driving code to make application functional.
+ * Sets up MVC.
+ * 
+ * @author sharvenp
+ */
 public class FPSApplication extends Application {
 
 	Game game;

@@ -1,6 +1,8 @@
 package main;
 
 import utils.Observable;
+import utils.UtilFunctions;
+
 import java.lang.Math;
 
 /**
@@ -18,7 +20,11 @@ public class Player extends Observable {
 	private int moveSpeed = 4;
 	private int angularSpeed = 5;
 	
+	private Raycaster raycaster;
+	private RaycastHit[] rayData;
+	
 	public Player(int px, int py) {
+		raycaster = new Raycaster(this);
 		this.setPosition(px, py);
 		this.lookAngle = 0;
 	}
@@ -58,20 +64,17 @@ public class Player extends Observable {
 		
 	private void turn(int dAngle) {
 		this.lookAngle += dAngle;
+		this.lookAngle = UtilFunctions.clampAngle(this.lookAngle);
 		
-		this.lookAngle %= 360;
-
-		if (this.lookAngle < 0)
-		{
-		    this.lookAngle += 360;
-		}
-		
+		this.rayData = this.raycaster.castRays();
 		this.notifyObservers();
 	}
 	
 	private void setPosition(int px, int py) {
 		this.px = px;
 		this.py = py;
+		
+		this.rayData = this.raycaster.castRays();
 		this.notifyObservers();
 	}
 	
@@ -82,6 +85,10 @@ public class Player extends Observable {
 	
 	public int getLookAngle() {
 		return this.lookAngle;
+	}
+	
+	public RaycastHit[] getRayData() {
+		return this.rayData;
 	}
 	
 	public String toString() {
